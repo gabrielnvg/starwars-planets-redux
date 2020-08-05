@@ -1,5 +1,6 @@
-import React, { memo } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import styles from './PlanetInfo.module.scss';
 
 import svgInfoSeparator from '../../assets/images/svg/info-separator.svg';
@@ -85,7 +86,8 @@ PlanetInfo.propTypes = {
   }).isRequired,
 };
 
-const arePropsEqual = (prevProps, nextProps) =>
-  JSON.stringify(prevProps) === JSON.stringify(nextProps);
+const mapStateToProps = state => ({
+  planet: state.planet.currentPlanet,
+});
 
-export default memo(PlanetInfo, arePropsEqual);
+export default connect(mapStateToProps)(PlanetInfo);

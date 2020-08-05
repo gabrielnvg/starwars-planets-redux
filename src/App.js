@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { incrementPlanetName } from './redux/modules/planet';
 import randomizeIntWithinRange from './assets/js/utils/randomizeIntWithinRange';
-import formatPlanet from './assets/js/utils/formatPlanet';
 
 import Header from './components/Header/Header';
 import FetchLoading from './components/FetchLoading/FetchLoading';
@@ -8,7 +11,7 @@ import FetchError from './components/FetchError/FetchError';
 import PlanetInfo from './components/PlanetInfo/PlanetInfo';
 import FetchButton from './components/FetchButton/FetchButton';
 
-function App() {
+function App({ incrementPlanetName }) {
   const [state, setState] = useState({
     fetchStatus: {
       isLoading: true,
@@ -37,6 +40,7 @@ function App() {
       await fetch(`${apiPrefix}/planets/${planetId}/`)
         .then(response => response.json())
         .then(planet => {
+          console.log('planet', planet);
           setState({
             ...state,
             fetchStatus: { isLoading: false, hasError: false },
@@ -93,12 +97,12 @@ function App() {
             <FetchError />
           )}
           {!state.fetchStatus.isLoading && !state.fetchStatus.hasError && (
-            <PlanetInfo planet={formatPlanet(state.currentFetchedPlanet)} />
+            <PlanetInfo />
           )}
         </div>
         <FetchButton
           text="Next"
-          onClick={handleButtonClick}
+          onClick={incrementPlanetName}
           isDisabled={state.fetchStatus.isLoading}
         />
       </div>
@@ -106,4 +110,11 @@ function App() {
   );
 }
 
-export default App;
+App.propTypes = {
+  incrementPlanetName: PropTypes.func.isRequired,
+};
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({ incrementPlanetName }, dispatch);
+
+export default connect(null, mapDispatchToProps)(App);
