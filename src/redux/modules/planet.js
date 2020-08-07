@@ -1,3 +1,4 @@
+import fetchWithTimeout from '../../assets/js/utils/fetchWithTimeout';
 import randomizeIntWithinRange from '../../assets/js/utils/randomizeIntWithinRange';
 import formatPlanet from '../../assets/js/utils/formatPlanet';
 
@@ -90,7 +91,10 @@ export const fetchRandomPlanet = planetId => (dispatch, getState) => {
       );
     }, 300);
   } else {
-    fetch(`${apiPrefix}/planets/${planetId}/`)
+    fetchWithTimeout({
+      url: `${apiPrefix}/planets/${planetId}/`,
+      timeout: 10000,
+    })
       .then(response => response.json())
       .then(planet => {
         dispatch(setCurrentPlanet(planetId, formatPlanet(planet)));
@@ -102,7 +106,10 @@ export const fetchRandomPlanet = planetId => (dispatch, getState) => {
 };
 
 export const initialFetches = () => dispatch => {
-  fetch(`${apiPrefix}/planets/`)
+  fetchWithTimeout({
+    url: `${apiPrefix}/planets/`,
+    timeout: 10000,
+  })
     .then(response => response.json())
     .then(planets => {
       dispatch(setTotalPlanets(planets.count));
