@@ -1,10 +1,11 @@
-import React, { memo } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
+import { useSelector } from 'react-redux'
 import styles from './PlanetInfo.module.scss';
 
 import svgInfoSeparator from '../../assets/images/svg/info-separator.svg';
 
-function PlanetInfo({ planet }) {
+function PlanetInfo() {
+  const planet = useSelector(state => state.planet.currentPlanet)
   return (
     <div className={styles['planet-info']}>
       <div className={styles.name}>{planet.name}</div>
@@ -75,17 +76,4 @@ function PlanetInfo({ planet }) {
   );
 }
 
-PlanetInfo.propTypes = {
-  planet: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    population: PropTypes.string.isRequired,
-    climate: PropTypes.arrayOf(PropTypes.string).isRequired,
-    terrain: PropTypes.arrayOf(PropTypes.string).isRequired,
-    films: PropTypes.number.isRequired,
-  }).isRequired,
-};
-
-const arePropsEqual = (prevProps, nextProps) =>
-  JSON.stringify(prevProps) === JSON.stringify(nextProps);
-
-export default memo(PlanetInfo, arePropsEqual);
+export default PlanetInfo;
