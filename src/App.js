@@ -24,7 +24,11 @@ function App() {
 
   const handleButtonClick = () => {
     dispatch(setFetchLoading(true));
-    dispatch(fetchRandomPlanet(randomizeIntWithinRange(1, totalPlanets)));
+    if (totalPlanets) {
+      dispatch(fetchRandomPlanet(randomizeIntWithinRange(1, totalPlanets)));
+    } else {
+      dispatch(initialFetches());
+    }
   };
 
   return (
